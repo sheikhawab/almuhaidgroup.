@@ -40,6 +40,12 @@ export async function submitInspection(payload: InspectionPayload) {
   if (!response.ok) {
     throw new Error(`Inspection request failed with status ${response.status}`)
   }
+
+  // A Wi-Fi login page can also answer 200, so only the form's own id proves it was saved.
+  const saved = await response.json()
+  if (saved.id !== payload.id) {
+    throw new Error("Inspection response did not come from the server")
+  }
 }
 
 export type SavedInspection = {
