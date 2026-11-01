@@ -1,0 +1,39 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+enum Answer {
+  yes
+  no
+  na
+}
+
+model Inspection {
+  // Generated on the device, so re-sending a form after a dropped connection can't save it twice.
+  id          String   @id @db.Uuid
+  workOrder   String
+  image       Bytes?
+  imageType   String?
+  // When the inspector submitted the form, which can be long before it reaches the server.
+  inspectedAt DateTime
+  createdAt   DateTime @default(now())
+
+  answers InspectionAnswer[]
+
+  @@index([workOrder])
+}
+
+model InspectionAnswer {
+  inspectionId String  @db.Uuid
+  itemId       String
+  answer       Answer
+  remark       String?
+
+  inspection Inspection @relation(fields: [inspectionId], references: [id])
+
+  @@id([inspectionId, itemId])
+}
