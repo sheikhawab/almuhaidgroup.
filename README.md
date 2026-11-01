@@ -6,9 +6,11 @@ and one image. Saved forms can be looked up by work order number.
 
 ## Run
 
-Requires Docker.
+Requires Git and Docker.
 
 ```bash
+git clone https://github.com/sheikhawab/almuhaidgroup..git muhaid
+cd muhaid
 cp .env.example .env
 docker compose up --build
 ```
